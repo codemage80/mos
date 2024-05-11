@@ -1,0 +1,25 @@
+     1                                  ; hello3.asm
+     2                                  section .data
+     3 00000000 48656C6C6F2C20576F-     	message	db	"Hello, World!", 10, 0
+     3 00000009 726C64210A00       
+     4                                  
+     5                                  section .bss
+     6                                  section .text
+     7                                  	global main
+     8                                  
+     9                                  	main:
+    10                                  		; syscall print string to stdout
+    11 00000000 B801000000              		mov rax, 1
+    12 00000005 BF01000000              		mov rdi, 1
+    13 0000000A 48BE-                   		mov rsi, message
+    13 0000000C [0000000000000000] 
+    14 00000014 BA0E000000              		mov rdx, 14
+    15 00000019 0F05                    		syscall
+    16                                  
+    17 0000001B EB00                    		jmp exit
+    18                                  
+    19                                  	exit:
+    20                                  		; syscall exit with return code 0
+    21 0000001D B83C000000              		mov rax, 60
+    22 00000022 BF00000000              		mov rdi, 0
+    23 00000027 0F05                    		syscall

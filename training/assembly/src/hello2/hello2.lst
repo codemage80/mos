@@ -1,0 +1,33 @@
+     1                                  ; hello2.asm
+     2                                  
+     3                                  section	.data
+     4 00000000 48656C6C6F2C20576F-     	msg		db	"Hello, World!", 0xa, 0	; Message to be printed
+     4 00000009 726C64210A00       
+     5 0000000F 0A0A                    	nl		db	0xa,0xa						; Newline character	
+     6                                  
+     7                                  section.bss
+     7          ******************       warning: label alone on a line without a colon might be in error [-w+label-orphan]
+     8                                  
+     9                                  section	.text
+    10                                  	global main
+    11                                  
+    12                                  	main:
+    13 00000000 B801000000              		mov rax, 1						; syscall (write = 1)
+    14 00000005 BF01000000              		mov	rdi, 1						; syscall write( arg1 = stdout)
+    15 0000000A 48BE-                   		mov rsi, msg 					; syscall write( arg2 = ptr to msg)
+    15 0000000C [0000000000000000] 
+    16 00000014 BA20000000              		mov	rdx, 32						; syscall write( arg3 = length of string excluding terminator)
+    17 00000019 0F05                    		syscall							; display the message
+    18                                  
+    19 0000001B B801000000              		mov	rax, 1						; syscall (write = 1)
+    20 00000020 BF01000000              		mov rdi, 1 				; syscall write (arg1 = STDOUT)
+    21 00000025 48BE-                   		mov rsi, nl 					; syscall write (arg 2 = ptr to nl)
+    21 00000027 [0F00000000000000] 
+    22 0000002F BA02000000              		mov rdx, 2						; syscall write (arg 3 = length of string excluding terminator)
+    23 00000034 0F05                    		syscall							; display the message
+    24                                  
+    25                                  	exit:
+    26 00000036 B83C000000              		mov	rax, 60						; syscall (exit = 60)
+    27 0000003B BF00000000              		mov	rdi, 0						; syscall exit(arg1 = exit code (0 => success))
+    28 00000040 0F05                    		syscall							; exit application
+    29                                  

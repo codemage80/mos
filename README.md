@@ -1,2 +1,2 @@
-# mos
+# MOS
 Modern Operating System Development
