@@ -1,0 +1,93 @@
+     1                                  %include "header.asm"
+     1                              <1> BITS 16
+     2                              <1> ORG 0x0000
+     3                              <1> 
+     4                              <1> _0x000:								; START OF BOOT SECTOR
+     5                              <1> 	%include "structures/boot.a"
+     1                              <2> __boot:
+     2 00000000 EB55                <2> 	jmp short main
+     3 00000002 90                  <2> 	nop
+     4 00000003 4D4F4445524E4F53    <2> 	db "MODERNOS"
+     5                              <2> 
+     6                              <2> 	
+     6                              <1> 
+     7                              <1> _0x00B:								; DOS 2.0 FAT12 STRUCTURE
+     8                              <1> 	%include "structures/dos20.a"
+     1                              <2> __dos20:
+     2 0000000B 0002                <2> 	dos20_bpls	dw	512				; Bytes per logical Sector
+     3 0000000D 04                  <2> 	dos20_lspc	db	4				; Logical sectors per cluster
+     4 0000000E 0100                <2> 	dos20_rsl	dw	1				; Reserved logical sectors
+     5 00000010 02                  <2> 	dos20_nof	db	2				; Number of FATs (File allocation tables)	
+     6 00000011 0002                <2> 	dos20_rde	dw	512				; Root directory entries
+     7 00000013 400B                <2> 	dos20_tls	dw	2880			; Rotal logical sectors
+     8 00000015 F8                  <2> 	dos20_md	db	0xF8			; Media descriptor
+     9 00000016 0300                <2> 	dos20_lspf	dw	3				; Logical sectors per FAT
+     9                              <1> 
+    10                              <1> _0x018:								; DOS 3.31 BPB Extensions
+    11                              <1> 	%include "structures/dos331.a"	
+     1                              <2> __dos331:
+     2 00000018 1000                <2> 	dos331_pspt	dw	16				; Physical sectors per track
+     3 0000001A 0200                <2> 	dos331_noh	dw	2				; Number of heads
+     4 0000001C 00000000            <2> 	dos331_hs	dd	0x00000000		; Hidden sectors
+     5 00000020 00000000            <2> 	dos331_ltls	dd	0x00000000		; Large total logical sectors
+    12                              <1> 
+    13                              <1> _0x024:								; DOS 7.1 BPB Extensions
+    14                              <1> 	%include "structures/dos71.a"
+     1                              <2> __dos71:
+     2 00000024 80000000            <2> 	dos71_lspf		dd 128			; Logical Sectors per FAT
+     3 00000028 FC07                <2> 	dos71_mflags	dw 0x7FC 		; Mirror flag etc
+     4 0000002A BC4E                <2> 	dos71_ver		dw 0x4EBC 		; Vesion
+     5 0000002C 4F204E41            <2> 	dos71_rdc		dd 0x414E204F	; Root Directory Cluster
+     6 00000030 4D45                <2> 	dos71_lofsi 	dw 0x454D 		; Location of FS Information Sector
+     7 00000032 2020                <2> 	dos71_lobs		dw 0x2020 		; Location of backup sector(s)
+     8 00000034 202046415431322020- <2> 	dos71_bfn		db "  FAT12   "	; Reserved (Boot file name)
+     8 0000003D 20                  <2>
+     9 0000003E 0E1F                <2> 					db 14,31		; Reserved (Boot file name)
+    10 00000040 BE                  <2> 	dos71_pd		db 0xbe			; Physical drive number
+    11 00000041 5B                  <2> 	dos71_flags		db 0x5b 		; Flags
+    12 00000042 7C                  <2> 	dos71_ebs		db 0x7c 		; Extended boot signature
+    13 00000043 AC22C074            <2> 	dos71_vsn		dd 0x74c022ac	; Volume serial number
+    14 00000047 4D4F4445524E4F53    <2> 	dos71_vl		db "MODERNOS"	; Volume Label
+    15                              <2> 					db 3 dup ''		; Volume label padding 
+    16 0000004F F032                <2> 	dos71_fst		db 0xf0,0x32	; File-system type
+    17 00000051 E4CD                <2> 					db 0xe4,0xcd
+    18 00000053 16CD                <2> 					db 0x16,0xcd
+    19 00000055 19EB                <2> 					db 0x19,0xeb		
+    20                              <2> 					
+    15                              <1> 
+    16                              <1> 
+    17                              <1> 
+    18                              <1> 	
+     2                                  
+     3                                  main:
+     4 00000057 B8C007                  	mov ax, 0x7C0
+     5 0000005A 052002                  	add ax, 544
+     6 0000005D FA                      	cli
+     7 0000005E 8ED0                    	mov ss, ax
+     8 00000060 BC0010                  	mov sp, 4096
+     9 00000063 FB                      	sti
+    10 00000064 B8C007                  	mov ax, 0x7C0
+    11 00000067 8ED8                    	mov ds, ax
+    12 00000069 8816[B400]              	mov byte [bootdev], dl
+    13 0000006D 66B800000000            	mov eax, 0
+    14                                  
+    15                                  
+    16                                  
+    17                                  
+    18                                  data:
+    19 00000073 4B45524E454C202042-     	kernel		db	"KERNEL  BIN"							; Kernel file system entry
+    19 0000007C 494E               
+    20 0000007E 53746F726167652065-     	diskerror	db 	"Storage error! Press any key...", 0	; Storage error message
+    20 00000087 72726F722120507265-
+    20 00000090 737320616E79206B65-
+    20 00000099 792E2E2E00         
+    21 0000009E 6B65726E656C2E6269-     	fnfmsg		db	"kernel.bin not found!", 0				; Kernel not found
+    21 000000A7 6E206E6F7420666F75-
+    21 000000B0 6E642100           
+    22 000000B4 00                      	bootdev		db	0x00									; Boot disk
+    23                                  
+    24                                  padding:
+    25 000000B5 00<rep 149h>            	times 510-($-$$) db 0
+    26 000001FE 55AA                    	dw 0xAA55
+    27                                  
+    28                                  

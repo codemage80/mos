@@ -1,0 +1,6 @@
+__boot:
+	jmp short main
+	nop
+	db "MODERNOS"
+
+	

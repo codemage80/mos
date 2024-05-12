@@ -1,0 +1,20 @@
+__dos71:
+	dos71_lspf		dd 128			; Logical Sectors per FAT
+	dos71_mflags	dw 0x7FC 		; Mirror flag etc
+	dos71_ver		dw 0x4EBC 		; Vesion
+	dos71_rdc		dd 0x414E204F	; Root Directory Cluster
+	dos71_lofsi 	dw 0x454D 		; Location of FS Information Sector
+	dos71_lobs		dw 0x2020 		; Location of backup sector(s)
+	dos71_bfn		db "  FAT12   "	; Reserved (Boot file name)
+					db 14,31		; Reserved (Boot file name)
+	dos71_pd		db 0xbe			; Physical drive number
+	dos71_flags		db 0x5b 		; Flags
+	dos71_ebs		db 0x7c 		; Extended boot signature
+	dos71_vsn		dd 0x74c022ac	; Volume serial number
+	dos71_vl		db "MODERNOS"	; Volume Label
+					db 3 dup ''		; Volume label padding 
+	dos71_fst		db 0xf0,0x32	; File-system type
+					db 0xe4,0xcd
+					db 0x16,0xcd
+					db 0x19,0xeb		
+					

@@ -1,0 +1,5 @@
+__dos331:
+	dos331_pspt	dw	16				; Physical sectors per track
+	dos331_noh	dw	2				; Number of heads
+	dos331_hs	dd	0x00000000		; Hidden sectors
+	dos331_ltls	dd	0x00000000		; Large total logical sectors

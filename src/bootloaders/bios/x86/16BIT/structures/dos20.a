@@ -1,0 +1,9 @@
+__dos20:
+	dos20_bpls	dw	512				; Bytes per logical Sector
+	dos20_lspc	db	4				; Logical sectors per cluster
+	dos20_rsl	dw	1				; Reserved logical sectors
+	dos20_nof	db	2				; Number of FATs (File allocation tables)	
+	dos20_rde	dw	512				; Root directory entries
+	dos20_tls	dw	2880			; Rotal logical sectors
+	dos20_md	db	0xF8			; Media descriptor
+	dos20_lspf	dw	3				; Logical sectors per FAT

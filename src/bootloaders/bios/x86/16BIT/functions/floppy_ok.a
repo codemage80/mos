@@ -1,0 +1,3 @@
+floppy_ok:
+	mov ax, 19
+	
